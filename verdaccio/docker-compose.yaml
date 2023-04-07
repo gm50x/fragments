@@ -1,0 +1,25 @@
+version: "3"
+
+networks:
+  skynet:
+    driver: bridge
+
+services:
+  verdaccio:
+    image: verdaccio/verdaccio
+    container_name: verdaccio
+    # if running on the default verdaccio user, volumes must be claimed with:
+    # docker exec --user root verdaccio chown verdaccio: /verdaccio -R
+    # to reclaim back into your host, use:
+    # sudo chown <user>: assets/verdaccio/conf -R # to reclaim
+    user: root
+    environment:
+      - VERDACCIO_PORT=4873
+    ports:
+      - "4873:4873"
+    networks:
+      - skynet
+    volumes:
+      - "./conf:/verdaccio/conf"
+      - "./storage:/verdaccio/storage"
+      - "./plugins:/verdaccio/plugins"
